@@ -1,7 +1,7 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-class CoordPoint
+class Coord2D
 {
     public $x;
     public $y;

@@ -41,6 +41,23 @@ class image extends \PMVC\PlugIn
         return round($angle);
     }
 
+    public function process(CoordPoint $point, ImageSize $size, $params, $callback )
+    {
+        array_unshift($params, '');
+        for ($xcoord = $point->x,$xend = $point->x + $size->w; $xcoord < $xend; $xcoord++) {
+            for ($ycoord = $point->y, $yend = $point->y + $size->h; $ycoord < $yend; $ycoord++) {
+                if($xcoord<0){
+                \PMVC\d($xcoord, $ycoord, $point);
+                }
+                $params[0] = new CoordPoint($xcoord, $ycoord);
+                call_user_func_array(
+                    $callback,
+                    $params
+                );
+            }
+        }
+    }
+
     public function getAngle(CoordPoint $a, CoordPoint $b)
     {
         $Opposite = $b->y - $a->y;
@@ -83,5 +100,13 @@ class image extends \PMVC\PlugIn
             $this->_creator = new ImageCreate(); 
         }
         return $this->_creator;
+    }
+
+    public function getResource($file)
+    {
+        $file = \PMVC\realpath($this->getDir().'resource/'.$file);
+        if($file){
+            return $file;
+        }
     }
 }

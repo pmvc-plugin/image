@@ -24,7 +24,7 @@ class ImagePaint
         $this->im = $im->toGd();
     }
         
-    public function getPixel(CoordPoint $point)
+    public function getPixel(Coord2D $point)
     {
         $rgb = imagecolorat($this->im, $point->x, $point->y);
         $red = ($rgb >> 16) & 0xff;
@@ -33,12 +33,12 @@ class ImagePaint
         return new BaseColor($red, $green, $blue);
     }
         
-    public function setPixel(CoordPoint $point, BaseColor $color)
+    public function setPixel(Coord2D $point, BaseColor $color)
     {
         imagesetpixel($this->im, $point->x, $point->y, $color->toGd($this->im));
     }
         
-    public function fillRect(CoordPoint $point, ImageSize $size, BaseColor $color)
+    public function fillRect(Coord2D $point, ImageSize $size, BaseColor $color)
     {
         imagefilledrectangle(
             $this->im,
@@ -50,7 +50,7 @@ class ImagePaint
         );
     }
 
-    public function fillCircle(CoordPoint $point, $radius, BaseColor $color)
+    public function fillCircle(Coord2D $point, $radius, BaseColor $color)
     {
         imagefilledellipse(
             $this->im, 
@@ -61,22 +61,57 @@ class ImagePaint
             $color->toGd($this->im)
         );
     }
+
+    public function paintCross(Coord2D $point, BaseColor $color, $size)
+    {
+        $points = $this->getCrossPoints($point, $size);
+        foreach ($points as $p) {
+            $this->setPixel($p, $color);
+        }
+    }
+
+    public function getCrossPoints(Coord2D $point, $size)
+    {
+       $points = array($point);
+       for ($i=0; $i<=$size; $i++) {
+           $points[] = new Coord2D($point->x, $point->y-$i);
+           $points[] = new Coord2D($point->x, $point->y+$i);
+           $points[] = new Coord2D($point->x-$i, $point->y);
+           $points[] = new Coord2D($point->x+$i, $point->y);
+       }
+       return $points;
+    }
         
-    public function overlayPixel(CoordPoint $point, BaseColor $color, $alpha)
+    public function overlayPixel(Coord2D $point, BaseColor $color, $alpha)
     {
         $existing = $this->getPixel($point);
         $newColor = $color->getClone()->setAlpha($existing,$alpha);
         $this->setPixel($point, $newColor);
     }
 
-    public function overlayRect(CoordPoint $point, ImageSize $size, BaseColor $color, $alpha)
+    public function overlayRect(Coord2D $point, ImageSize $size, BaseColor $color, $alpha)
     {
-        for ($xcoord = $point->x; $xcoord < $point->x + $size->w; $xcoord++) {
-            for ($ycoord = $point->y; $ycoord < $point->y + $size->h; $ycoord++) {
-                $this->overlayPixel(new CoordPoint($xcoord, $ycoord), $color, $alpha);
-            }
-        }
+        $self = $this;
+        \PMVC\plug('image')->process($point,$size,array($color,$alpha),function($point,$color,$alpha) use($self) {
+            $self->overlayPixel($point, $color, $alpha);
+        });
     }
+
+    public function text($text, Coord2D $point, BaseColor $color, $size=13, $angle=1) 
+    {
+        $fontfile = \PMVC\plug('image')->getResource('Slabo13px-Regular.ttf');
+        imagettftext ( 
+            $this->im , 
+            $size , 
+            $angle , 
+            $point->x , 
+            $point->y , 
+            $color->toGd($this->im) , 
+            $fontfile , 
+            $text
+        );
+    }
+
         
     public function outputPNG()
     {

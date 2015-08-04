@@ -3,14 +3,15 @@ namespace PMVC\PlugIn\image;
 
 class Region 
 {
-    public $per_w;
-    public $per_h;
-    public $lt;
-    public $size;
+    private $per_w;
+    private $per_h;
+    private $lt;
+    private $size;
+
     function __construct(
-        CoordPoint $lt,
-        CoordPoint $rt,
-        CoordPoint $lb,
+        Coord2D $lt,
+        Coord2D $rt,
+        Coord2D $lb,
         ImageSize $newsize
     ) {
         $width =  $rt->x - $lt->x;
@@ -21,23 +22,43 @@ class Region
         $this->size = $newsize;
     }
 
-    function getNewXY(CoordPoint $point)
+    function getNewXY(Coord2D $point, Coord2D $adjust=null)
     {
         $x = ($point->x - $this->lt->x) / $this->per_w; 
         $y = ($point->y - $this->lt->y) / $this->per_h; 
-        $new =  new CoordPoint($this->flot($x),$this->flot($y));
+        $new =  new Coord2D($x,$y);
         if ($this->inRegion($new)) {
+            if ($adjust) {
+                $new->x = $new->x + $adjust->x;
+                $new->y = $new->y + $adjust->y;
+                $new->x = $this->fixRegion($new->x, $this->size->w);
+                $new->y = $this->fixRegion($new->y, $this->size->h);
+            }
             return $new;
         } else {
             return false;
         }
     }
 
-    function flot($flot){
+    function fixRegion($num,$max)
+    {
+        if (0>$num) {
+            $num = 0;
+        } elseif ($num > $max) {
+            $num = $max;
+        }
+        $num = $this->flot($num);
+        return $num;
+    }
+
+
+    function flot($flot)
+    {
         return sprintf("%' 9.6f",$flot);
     }
 
-    function inRegion(CoordPoint $point){
+    function inRegion(Coord2D $point)
+    {
         return
             $point->x >= 0 &&
             $point->y >= 0 &&    
