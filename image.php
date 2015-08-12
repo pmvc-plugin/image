@@ -21,10 +21,10 @@ class image extends \PMVC\PlugIn
         $y = round($aSize['h'] / 2);
         $x -= round($aCut['w'] / 2);
         $y -= round($aCut['h'] / 2);
-        return new CoordPoint($x,$y);
+        return new Coord2D($x,$y);
     }
 
-    public function getDistance(CoordPoint $a, CoordPoint $b)
+    public function getDistance(Coord2D $a, Coord2D $b)
     {
         $d = sqrt ( 
              pow(($b->x - $a->x),2) +
@@ -41,7 +41,7 @@ class image extends \PMVC\PlugIn
         return round($angle);
     }
 
-    public function process(CoordPoint $point, ImageSize $size, $params, $callback )
+    public function process(Coord2D $point, ImageSize $size, $params, $callback )
     {
         array_unshift($params, '');
         for ($xcoord = $point->x,$xend = $point->x + $size->w; $xcoord < $xend; $xcoord++) {
@@ -49,7 +49,7 @@ class image extends \PMVC\PlugIn
                 if($xcoord<0){
                 \PMVC\d($xcoord, $ycoord, $point);
                 }
-                $params[0] = new CoordPoint($xcoord, $ycoord);
+                $params[0] = new Coord2D($xcoord, $ycoord);
                 call_user_func_array(
                     $callback,
                     $params
@@ -58,7 +58,7 @@ class image extends \PMVC\PlugIn
         }
     }
 
-    public function getAngle(CoordPoint $a, CoordPoint $b)
+    public function getAngle(Coord2D $a, Coord2D $b)
     {
         $Opposite = $b->y - $a->y;
         $Adjacent = $b->x - $a->x;
@@ -79,12 +79,12 @@ class image extends \PMVC\PlugIn
      * get geo point "a", angle "angle", and dis "m"
      * return geo point "b"
      */
-    public function getPointByDistance(CoordPoint $pa, $angle, $len)
+    public function getPointByDistance(Coord2D $pa, $angle, $len)
     {
         $angle = deg2rad($angle);
         $x2 = $len * $this->flot(cos($angle)) + $pa->x;
         $y2 = $len * $this->flot(sin($angle)) + $pa->y; 
-        $pb = new CoordPoint($x2,$y2);
+        $pb = new Coord2D($x2,$y2);
         return $pb;
     }
 

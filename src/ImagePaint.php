@@ -115,6 +115,12 @@ class ImagePaint
         
     public function outputPNG()
     {
+        ob_start();
         imagepng($this->im);
+        $output = ob_get_contents();
+        ob_end_clean();
+        imagedestroy($this->im);
+        echo $output;
+        flush();
     }
 }
