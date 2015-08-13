@@ -10,4 +10,24 @@ class Coord2D
         $this->x = $x;
         $this->y = $y;
     }
+
+    public function toString()
+    {
+        return $this->x.','.$this->y;
+    }
+
+    public function __tostring()
+    {
+        return $this->toString();
+    }
+
+    public function getx()
+    {
+        return round($this->x);
+    }
+
+    public function gety()
+    {
+        return round($this->y);
+    }
 }

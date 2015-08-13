@@ -64,24 +64,12 @@ class ImagePaint
 
     public function paintCross(Coord2D $point, BaseColor $color, $size)
     {
-        $points = $this->getCrossPoints($point, $size);
-        foreach ($points as $p) {
+        $points = (new Cross())->getPoints($point, $size);
+        foreach ($points->points as $p) {
             $this->setPixel($p, $color);
         }
     }
 
-    public function getCrossPoints(Coord2D $point, $size)
-    {
-       $points = array($point);
-       for ($i=0; $i<=$size; $i++) {
-           $points[] = new Coord2D($point->x, $point->y-$i);
-           $points[] = new Coord2D($point->x, $point->y+$i);
-           $points[] = new Coord2D($point->x-$i, $point->y);
-           $points[] = new Coord2D($point->x+$i, $point->y);
-       }
-       return $points;
-    }
-        
     public function overlayPixel(Coord2D $point, BaseColor $color, $alpha)
     {
         $existing = $this->getPixel($point);
