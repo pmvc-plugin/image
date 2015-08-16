@@ -29,6 +29,14 @@ class Cross
                 $imgSize
             );
            $this->storePoint(
+                new Coord2D($point->x+$i, $point->y),
+                $points,
+                $directions,
+                self::right,
+                $i,
+                $imgSize
+            );
+           $this->storePoint(
                 new Coord2D($point->x, $point->y+$i),
                 $points,
                 $directions,
@@ -41,14 +49,6 @@ class Cross
                 $points,
                 $directions,
                 self::left,
-                $i,
-                $imgSize
-            );
-           $this->storePoint(
-                new Coord2D($point->x+$i, $point->y),
-                $points,
-                $directions,
-                self::right,
                 $i,
                 $imgSize
             );
