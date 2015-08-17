@@ -1,6 +1,5 @@
 <?php
 namespace PMVC\PlugIn\image;
-use PMVC\PlugIn\color\BaseColor;
 
 class ImagePaint
 {
@@ -33,7 +32,8 @@ class ImagePaint
         $red = ($rgb >> 16) & 0xff;
         $green = ($rgb >> 8) & 0xff;
         $blue = $rgb & 0xff;
-        return new BaseColor($red, $green, $blue);
+        $color = \PMVC\plug('color');
+        return $color->getColor($red, $green, $blue);
     }
         
     public function setPixel(Coord2D $point, BaseColor $color)
