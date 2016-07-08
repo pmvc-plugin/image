@@ -1,12 +1,20 @@
 <?php
 namespace PMVC\PlugIn\image;
 
+${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\ImageInfo';
+
 class ImageInfo
 {
     private $_images_info = array();
+
+    function __invoke()
+    {
+        return $this;
+    }
+
     function get(ImageFile $file)
     {
-        $path = \PMVC\realpath($file->getPath());
+        $path = $file->getPath();
         if (empty($this->_images_info[$path])) {
             $this->_images_info[$path] = 
                 getimagesize($path);

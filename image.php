@@ -1,13 +1,10 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-// \PMVC\l(__DIR__.'/xxx.php');
-
 ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\image';
 
 class image extends \PMVC\PlugIn
 {
-    private $_info;
     private $_creator;
 
     public function getCenter(ImageSize $size, ImageSize $cut=null)
@@ -41,14 +38,23 @@ class image extends \PMVC\PlugIn
         return round($angle);
     }
 
-    public function process(Coord2D $point, ImageSize $size, $params, $callback )
-    {
+    public function process (
+        Coord2D $point,
+        ImageSize $size,
+        $params,
+        $callback
+    ) {
         array_unshift($params, '');
-        for ($xcoord = $point->x,$xend = $point->x + $size->w; $xcoord < $xend; $xcoord++) {
-            for ($ycoord = $point->y, $yend = $point->y + $size->h; $ycoord < $yend; $ycoord++) {
-                if($xcoord<0){
-                \PMVC\d($xcoord, $ycoord, $point);
-                }
+        for ( $xcoord = $point->x,
+               $xend = $point->x + $size->w;
+              $xcoord < $xend;
+              $xcoord++
+            ) {
+            for ($ycoord = $point->y,
+                  $yend = $point->y + $size->h;
+                 $ycoord < $yend;
+                 $ycoord++
+                ) {
                 $params[0] = new Coord2D($xcoord, $ycoord);
                 call_user_func_array(
                     $callback,
@@ -79,8 +85,11 @@ class image extends \PMVC\PlugIn
      * get geo point "a", angle "angle", and dis "m"
      * return geo point "b"
      */
-    public function getPointByDistance(Coord2D $pa, $angle, $len)
-    {
+    public function getPointByDistance(
+        Coord2D $pa,
+        $angle,
+        $len
+    ) {
         $angle = deg2rad($angle);
         $x2 = $len * $this->flot(cos($angle)) + $pa->x;
         $y2 = $len * $this->flot(sin($angle)) + $pa->y; 
@@ -88,14 +97,8 @@ class image extends \PMVC\PlugIn
         return $pb;
     }
 
-    public function getImageInfoObject() {
-        if (empty($this->_info)) {
-            $this->_info = new ImageInfo(); 
-        }
-        return $this->_info;
-    }
-
-    public function getImageCreator() {
+    public function getImageCreator()
+    {
         if (empty($this->_creator)) {
             $this->_creator = new ImageCreate(); 
         }

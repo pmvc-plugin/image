@@ -7,19 +7,22 @@ class ImageFile
     public function __construct($file)
     {
        $this->_path = \PMVC\realpath($file); 
+       if (empty($this->_path)) {
+            return trigger_error('[ImageFile] file not exists');
+       }
     }
 
     public function getExt()
     {
         $info = \PMVC\plug('image')
-            ->getImageInfoObject();
+            ->info();
         return $info->getExt($this); 
     }
 
     public function getSize()
     {
         $info = \PMVC\plug('image')
-            ->getImageInfoObject();
+            ->info();
         return $info->getSize($this); 
     }
 
