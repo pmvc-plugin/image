@@ -4,6 +4,7 @@ namespace PMVC\PlugIn\image;
 class ImageFile
 {
     private $_path;
+    private $_gd;
     public function __construct($file)
     {
        $this->_path = \PMVC\realpath($file); 
@@ -33,8 +34,17 @@ class ImageFile
 
     public function toGd()
     {
-        $creator = \PMVC\plug('image')
-            ->getImageCreator();
-        return $creator->toGd($this); 
+       if (!$this->_gd) {
+            $this->_gd = \PMVC\plug('image')
+                 ->create($this);
+       }
+       return $this->_gd; 
     } 
+
+    public function __destruct()
+    {
+        if (!empty($this->_gd)) {
+            ImageDestroy($this->_gd);
+        }
+    }
 }

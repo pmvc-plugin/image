@@ -5,8 +5,6 @@ ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\image';
 
 class image extends \PMVC\PlugIn
 {
-    private $_creator;
-
     public function getCenter(ImageSize $size, ImageSize $cut=null)
     {
         $aSize = $size->toArray();
@@ -39,11 +37,14 @@ class image extends \PMVC\PlugIn
     }
 
     public function process (
-        Coord2D $point,
         ImageSize $size,
         $params,
-        $callback
+        $callback,
+        $point = null
     ) {
+        if (!($point instanceof Coord2D)) {
+            $point = new Coord2D(0, 0);
+        }
         array_unshift($params, '');
         for ( $xcoord = $point->x,
                $xend = $point->x + $size->w;
@@ -105,11 +106,15 @@ class image extends \PMVC\PlugIn
         return $this->_creator;
     }
 
-    public function getResource($file)
+    public function create($input)
     {
-        $file = \PMVC\realpath($this->getDir().'resource/'.$file);
-        if($file){
-            return $file;
+        if ($input instanceof ImageFile) {
+            return $this->creator()->toGd($input);
+        } elseif ($input instanceof ImageSize) {
+            return $this->creator()->toGd(null, $input);
+        } else {
+            return !trigger_error('[Image:create] input only could accept file or size');
         }
     }
+
 }
