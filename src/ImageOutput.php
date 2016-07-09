@@ -3,35 +3,47 @@ namespace PMVC\PlugIn\image;
 
 class ImageOutput
 {
-    public function __construct($im=null)
-    {
-        $this->im = $im;
-    }
-
-    public function setImage(ImageFile $im)
-    {
-        $this->im = $im->toGd();
-    }
-
-    public function png()
-    {
-        header ('Content-type: image/png');
-        imagepng($this->im);
-    }
-
+    private $_gd;
+    
     public static function toGd($object)
     {
-        $io = new ImageOutput($object->toGd());
-        $io->output();
+        return new ImageOutput($object->toGd());
     }
 
-    public function output()
+    public function __construct($im)
+    {
+        if ('gd'===get_resource_type($im)) {
+            $this->_gd = $im;
+        } else {
+            throw new InvalidArgumentException('[ImageOutput] Not a valid gd resource.');
+        }
+    }
+
+    public function dumpPng()
+    {
+        header ('Content-type: image/png');
+        imagepng($this->_gd);
+    }
+
+    public function savePng($f)
+    {
+        imagepng($this->_gd, $f);
+        return $f;
+    }
+
+    public function save()
+    {
+        $tmp = \PMVC\plug('tmp')->file();
+        return $this->savePng($tmp);
+    }
+
+    public function dump()
     {
         ob_start();
-        $this->png();
+        $this->dumpPng();
         $output = ob_get_contents();
         ob_end_clean();
-        imagedestroy($this->im);
+        imagedestroy($this->_gd);
         echo $output;
         flush();
     }
