@@ -117,4 +117,8 @@ class image extends \PMVC\PlugIn
         }
     }
 
+    public function toImage($f)
+    {
+        return new ImageFile($f);
+    }
 }
