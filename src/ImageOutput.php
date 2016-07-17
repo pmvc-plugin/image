@@ -12,7 +12,7 @@ class ImageOutput
 
     public function __construct($im)
     {
-        if ('gd'===get_resource_type($im)) {
+        if (\PMVC\plug('image')->isGd($im)) {
             $this->_gd = $im;
         } else {
             throw new InvalidArgumentException('[ImageOutput] Not a valid gd resource.');

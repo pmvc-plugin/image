@@ -121,4 +121,10 @@ class image extends \PMVC\PlugIn
     {
         return new ImageFile($f);
     }
+
+    public function isGd($gd)
+    {
+        return is_resource($gd) &&
+            'gd'===get_resource_type($gd);
+    }
 }
