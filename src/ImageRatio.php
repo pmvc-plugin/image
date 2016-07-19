@@ -3,11 +3,13 @@ namespace PMVC\PlugIn\image;
 
 class ImageRatio
 {
+    public $dstSize;
+    public $maxSize;
     public $newSize;
     public $origSize;
-    public $maxSize;
+    public $locForMaxSize;
     public $locForNewSize;
-    public $locForSameSize;
+    public $locForOrigSize;
 
     function __construct(ImageFile $file, ImageSize $dstSize)
     {
@@ -16,6 +18,7 @@ class ImageRatio
             ->getSize($file); 
         $this->newSize = clone $dstSize;
         $this->maxSize = clone $dstSize;
+        $this->dstSize = $dstSize;
         $this->origSize = $origSize;
         if ($origSize->w > $origSize->h) {
             $this->locForNewSize = $this->fitX($this->newSize, $origSize);
@@ -24,25 +27,31 @@ class ImageRatio
             $this->locForNewSize = $this->fitY($this->newSize, $origSize);
             $this->fitY($this->maxSize, $origSize, true);
         }
+        $this->locForMaxSize = $this->getLocForSame($dstSize, $this->maxSize, $this->maxSize);
+        $this->locForOrigSize = $this->getLocForSame($dstSize, $origSize, $this->maxSize);
+    }
+
+    function getLocForSame(ImageSize $dstSize, ImageSize $origSize, ImageSize $maxSize)
+    {
         $same = new Coord2D(
             ($dstSize->w - $origSize->w) / 2,
             ($dstSize->h - $origSize->h) / 2
         ); 
         if ($same->x < 0) {
-            if ($this->maxSize->w > $dstSize->w) {
-                $same->x = -(($this->maxSize->w - $dstSize->w) / 2);
+            if ($maxSize->w > $dstSize->w) {
+                $same->x = -(($maxSize->w - $dstSize->w) / 2);
             } else {
                 $same->x = 0;
             }
         }
         if ($same->y < 0) {
-            if ($this->maxSize->h > $dstSize->h) {
-                $same->y = -(($this->maxSize->h - $dstSize->h) / 2);
+            if ($maxSize->h > $dstSize->h) {
+                $same->y = -(($maxSize->h - $dstSize->h) / 2);
             } else {
                 $same->y = 0;
             }
         }
-        $this->locForSameSize = $same;
+        return $same;
     }
 
     function fitX(ImageSize $newSize, ImageSize $origSize, $force=false)

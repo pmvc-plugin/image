@@ -23,11 +23,11 @@ class ImageRatioTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $newW,
-            $ratio->origSize->w + $ratio->locForSameSize->x*2
+            $ratio->origSize->w + $ratio->locForOrigSize->x*2
         );
         $this->assertEquals(
             $newH,
-            $ratio->origSize->h + $ratio->locForSameSize->y*2
+            $ratio->origSize->h + $ratio->locForOrigSize->y*2
         );
         $this->assertTrue($ratio->newSize->w <= $newW);
         $this->assertTrue($ratio->newSize->h <= $newH);
