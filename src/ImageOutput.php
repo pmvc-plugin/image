@@ -14,12 +14,14 @@ class ImageOutput
 
     public function __construct($im)
     {
-        if (\PMVC\plug('image')->isGd($im)) {
-            $this->_gd = $im;
-        } elseif (is_callable([$im, 'toGd'])) {
-            $this->_gd = $im->toGd();
-        } else {
-            throw new InvalidArgumentException('[ImageOutput] Not a valid gd resource.');
+        $this->_gd = \PMVC\plug('image')->getGd($im);
+        if (empty($this->_gd)) {
+            throw new InvalidArgumentException(
+                json_encode([
+                    'ImageOutput' => 'Not a valid gd resource.',
+                    'maybe' => $im
+                ])
+            );
         }
     }
 

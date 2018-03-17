@@ -109,9 +109,25 @@ class image extends \PMVC\PlugIn
         }
     }
 
-    public function isGd($gd)
+    public function isGd($maybeGd)
     {
-        return is_resource($gd) &&
-            'gd'===get_resource_type($gd);
+        return is_resource($maybeGd) &&
+            'gd' === get_resource_type($maybeGd);
+    }
+
+    public function getGd($maybeGd)
+    {
+        if ($this->isGd($maybeGd)) {
+            return $maybeGd;
+        } elseif (is_callable([$maybeGd, 'toGd'])) {
+            return $maybeGd->toGd();
+        } else {
+            return false;
+        }
+    }
+
+    public function getOutput($im)
+    {
+        return new ImageOutput($im);
     }
 }
