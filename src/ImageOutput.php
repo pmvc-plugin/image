@@ -5,7 +5,7 @@ use InvalidArgumentException;
 
 class ImageOutput
 {
-    private $_gd;
+    private $_im;
     
     public static function toGd($object)
     {
@@ -14,8 +14,13 @@ class ImageOutput
 
     public function __construct($im)
     {
-        $this->_gd = \PMVC\plug('image')->getGd($im);
-        if (empty($this->_gd)) {
+        $this->_im = $im;
+    }
+
+    private function _toGd()
+    {
+        $gd = \PMVC\plug('image')->getGd($this->_im);
+        if (empty($gd)) {
             throw new InvalidArgumentException(
                 json_encode([
                     'ImageOutput' => 'Not a valid gd resource.',
@@ -23,17 +28,18 @@ class ImageOutput
                 ])
             );
         }
+        return $gd;
     }
 
     private function _dumpPng()
     {
         header ('Content-type: image/png');
-        imagepng($this->_gd);
+        imagepng($this->_toGd());
     }
 
     private function _savePng($f)
     {
-        imagepng($this->_gd, $f);
+        imagepng($this->_toGd(), $f);
         return $f;
     }
 
@@ -49,7 +55,7 @@ class ImageOutput
         $this->_dumpPng();
         $output = ob_get_contents();
         ob_end_clean();
-        imagedestroy($this->_gd);
+        unset($this->_im);
         echo $output;
         flush();
     }

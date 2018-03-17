@@ -40,7 +40,7 @@ class ImageCanvas
 
     public function __destruct()
     {
-        if (!empty($this->_gd)) {
+        if (\PMVC\plug('image')->isGd($this->_gd)) {
             ImageDestroy($this->_gd);
             $this->_gd = null;
             unset($this->_gd);
