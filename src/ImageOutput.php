@@ -1,6 +1,8 @@
 <?php
 namespace PMVC\PlugIn\image;
 
+use InvalidArgumentException;
+
 class ImageOutput
 {
     private $_gd;
@@ -14,6 +16,8 @@ class ImageOutput
     {
         if (\PMVC\plug('image')->isGd($im)) {
             $this->_gd = $im;
+        } elseif (is_callable([$im, 'toGd'])) {
+            $this->_gd = $im->toGd();
         } else {
             throw new InvalidArgumentException('[ImageOutput] Not a valid gd resource.');
         }

@@ -1,10 +1,13 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-class ImageFile
+class ImageFile extends ImageCanvas 
 {
+    const gif='gif';
+    const jpg='jpg';
+    const png='png';
     private $_path;
-    private $_gd;
+
     public function __construct($file)
     {
        $this->_path = \PMVC\realpath($file); 
@@ -35,16 +38,21 @@ class ImageFile
     public function toGd()
     {
        if (!$this->_gd) {
-            $this->_gd = \PMVC\plug('image')
-                 ->create($this);
+            $ext = $this->getExt(); 
+            $path = $this->getPath();
+            switch($ext){
+            case self::gif:
+                $gdImage = imagecreatefromgif($path);
+                break;
+            case self::jpg:
+                $gdImage = imagecreatefromjpeg($path);
+                break;
+            case self::png:
+                $gdImage = imagecreatefrompng($path);
+                break;
+            }
+            $this->_gd = $gdImage;
        }
        return $this->_gd; 
     } 
-
-    public function __destruct()
-    {
-        if (!empty($this->_gd)) {
-            ImageDestroy($this->_gd);
-        }
-    }
 }

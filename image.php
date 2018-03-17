@@ -98,28 +98,15 @@ class image extends \PMVC\PlugIn
         return $pb;
     }
 
-    public function getImageCreator()
-    {
-        if (empty($this->_creator)) {
-            $this->_creator = new ImageCreate(); 
-        }
-        return $this->_creator;
-    }
-
     public function create($input)
     {
-        if ($input instanceof ImageFile) {
-            return $this->creator()->toGd($input);
+        if (is_string($input) && is_file($input)) {
+            return new ImageFile($input);
         } elseif ($input instanceof ImageSize) {
-            return $this->creator()->toGd(null, $input);
+            return new ImageCanvas($input);
         } else {
             return !trigger_error('[Image:create] input only could accept file or size');
         }
-    }
-
-    public function toImage($f)
-    {
-        return new ImageFile($f);
     }
 
     public function isGd($gd)
