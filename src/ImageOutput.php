@@ -23,13 +23,13 @@ class ImageOutput
         }
     }
 
-    public function dumpPng()
+    private function _dumpPng()
     {
         header ('Content-type: image/png');
         imagepng($this->_gd);
     }
 
-    public function savePng($f)
+    private function _savePng($f)
     {
         imagepng($this->_gd, $f);
         return $f;
@@ -38,13 +38,13 @@ class ImageOutput
     public function save()
     {
         $tmp = \PMVC\plug('tmp')->file();
-        return $this->savePng($tmp);
+        return $this->_savePng($tmp);
     }
 
     public function dump()
     {
         ob_start();
-        $this->dumpPng();
+        $this->_dumpPng();
         $output = ob_get_contents();
         ob_end_clean();
         imagedestroy($this->_gd);
