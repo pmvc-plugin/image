@@ -9,8 +9,9 @@ class ImageRatioTest extends PHPUnit_Framework_TestCase
     {
         $newW = 1000;
         $newH = 1000;
+        $inputFile = new ImageFile(__DIR__.'/../resource/demo.jpg');
         $ratio = new ImageRatio(
-            new ImageFile(__DIR__.'/../resource/demo.jpg'),
+            $inputFile->getSize(),
             new ImageSize($newW, $newH)
         );
         $this->assertEquals(

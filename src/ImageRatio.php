@@ -11,11 +11,8 @@ class ImageRatio
     public $locForNewSize;
     public $locForOrigSize;
 
-    function __construct(ImageFile $file, ImageSize $dstSize)
+    function __construct(ImageSize $origSize, ImageSize $dstSize)
     {
-        $origSize = \PMVC\plug('image')
-            ->info()
-            ->getSize($file); 
         $this->newSize = clone $dstSize;
         $this->maxSize = clone $dstSize;
         $this->dstSize = $dstSize;
