@@ -6,11 +6,6 @@ use InvalidArgumentException;
 class ImageOutput
 {
     private $_im;
-    
-    public static function toGd($object)
-    {
-        return new ImageOutput($object->toGd());
-    }
 
     public function __construct($im)
     {
@@ -51,12 +46,7 @@ class ImageOutput
 
     public function dump()
     {
-        ob_start();
         $this->_dumpPng();
-        $output = ob_get_contents();
-        ob_end_clean();
-        unset($this->_im);
-        echo $output;
         flush();
     }
 }
