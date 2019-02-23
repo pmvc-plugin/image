@@ -1,7 +1,7 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-class Region 
+class Region
 {
     private $per_w;
     private $per_h;
@@ -26,7 +26,7 @@ class Region
     {
         $x = ($point->x - $this->lt->x) / $this->per_w; 
         $y = ($point->y - $this->lt->y) / $this->per_h; 
-        $new =  new Coord2D($x,$y);
+        $new =  new Coord2D($x, $y);
         if ($this->inRegion($new)) {
             if ($adjust) {
                 $new->x = $new->x + $adjust->x;
@@ -47,14 +47,8 @@ class Region
         } elseif ($num > $max) {
             $num = $max;
         }
-        $num = $this->flot($num);
+        $num = \PMVC\plug('image')->fixedFloat($num);
         return $num;
-    }
-
-
-    function flot($flot)
-    {
-        return sprintf("%' 9.6f",$flot);
     }
 
     function inRegion(Coord2D $point)

@@ -78,8 +78,8 @@ class image extends \PMVC\PlugIn
         return $this->absAngle($Angle);
     }
 
-    public function flot($flot){
-        return sprintf("%' 9.6f",$flot);
+    public function fixedFloat($f){
+        return sprintf("%' 9.6f",$f);
     }
 
     /**
@@ -92,8 +92,8 @@ class image extends \PMVC\PlugIn
         $len
     ) {
         $angle = deg2rad($angle);
-        $x2 = $len * $this->flot(cos($angle)) + $pa->x;
-        $y2 = $len * $this->flot(sin($angle)) + $pa->y; 
+        $x2 = $len * $this->fixedFloat(cos($angle)) + $pa->x;
+        $y2 = $len * $this->fixedFloat(sin($angle)) + $pa->y; 
         $pb = new Coord2D($x2,$y2);
         return $pb;
     }

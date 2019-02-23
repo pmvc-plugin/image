@@ -4,7 +4,7 @@
 [![License](https://poser.pugx.org/pmvc-plugin/image/license)](https://packagist.org/packages/pmvc-plugin/image)
 [![Total Downloads](https://poser.pugx.org/pmvc-plugin/image/downloads)](https://packagist.org/packages/pmvc-plugin/image) 
 
-# PMVC Image Library 
+PMVC Image Library 
 ===============
 
 ## Install with Composer
