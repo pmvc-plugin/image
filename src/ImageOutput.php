@@ -5,21 +5,22 @@ use InvalidArgumentException;
 
 class ImageOutput
 {
-    private $_im;
+    protected $_gd;
+    use TraitImageCanvas;
 
     public function __construct($im)
     {
-        $this->_im = $im;
+        $this->_gd = $im;
     }
 
-    private function _toGd()
+    protected function toGd()
     {
-        $gd = \PMVC\plug('image')->getGd($this->_im);
+        $gd = \PMVC\plug('image')->getGd($this->_gd);
         if (empty($gd)) {
             throw new InvalidArgumentException(
                 json_encode([
                     'ImageOutput' => 'Not a valid gd resource.',
-                    'maybe' => $im
+                    'maybe' => $this->_gd
                 ])
             );
         }
@@ -29,12 +30,12 @@ class ImageOutput
     private function _dumpPng()
     {
         header ('Content-type: image/png');
-        imagepng($this->_toGd());
+        imagepng($this->toGd());
     }
 
     private function _savePng($f)
     {
-        imagepng($this->_toGd(), $f);
+        imagepng($this->toGd(), $f);
         return $f;
     }
 
