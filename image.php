@@ -33,24 +33,24 @@ class image extends \PMVC\PlugIn
         return round($angle);
     }
 
-    public function process(ImageSize $size, array $params, callable $callback, $point = null)
+    public function process(ImageSize $size, array $params, callable $callback, $startPoint = null, $moveSize = null)
     {
-        if (!($point instanceof Coord2D)) {
-            $point = new Coord2D(0, 0);
+        if (!($startPoint instanceof Coord2D)) {
+            $startPoint = new Coord2D(0, 0);
         }
-        if ($point instanceof ImageSize) {
-            $point = $point->toPoint();
+        if (is_null($moveSize)) {
+            $moveSize = new ImageSize(1, 1);
         }
         array_unshift($params, '');
         for (
-            $xcoord = $point->x, $xend = $point->x + $size->w;
+            $xcoord = $startPoint->x, $xend = $startPoint->x + $size->w;
             $xcoord < $xend;
-            $xcoord++
+            $xcoord+=$moveSize->w
         ) {
             for (
-                $ycoord = $point->y, $yend = $point->y + $size->h;
+                $ycoord = $startPoint->y, $yend = $startPoint->y + $size->h;
                 $ycoord < $yend;
-                $ycoord++
+                $ycoord+=$moveSize->h
             ) {
                 $params[0] = new Coord2D($xcoord, $ycoord);
                 call_user_func_array($callback, $params);
