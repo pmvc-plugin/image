@@ -49,16 +49,15 @@ class ImageCanvas
 
     public function getPixel(Coord2D $point)
     {
-        $rgb = imagecolorat(
-            $this->toGd(),
+        $natGd = $this->toGd();
+        $rgbInt = imagecolorat(
+            $natGd,
             $point->x,
             $point->y
         );
-        $red = ($rgb >> 16) & 0xff;
-        $green = ($rgb >> 8) & 0xff;
-        $blue = $rgb & 0xff;
+        $rgbArr = imagecolorsforindex($natGd, $rgbInt);
         $color = \PMVC\plug('color');
-        return $color->getColor($red, $green, $blue);
+        return $color->getColor($rgbArr['red'], $rgbArr['green'], $rgbArr['blue'], $rgbArr['alpha']);
     }
         
     public function setPixel(Coord2D $point, BaseColor $color)
