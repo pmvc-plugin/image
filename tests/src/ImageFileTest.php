@@ -1,9 +1,9 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class ImageFileTest extends PHPUnit_Framework_TestCase
+class ImageFileTest extends TestCase
 {
     private $_demo =__DIR__.'/../resource/demo.jpg'; 
     function testGetPixel()

@@ -1,9 +1,9 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class ImageOutputTest extends PHPUnit_Framework_TestCase
+class ImageOutputTest extends TestCase
 {
     function testImageOutput()
     {

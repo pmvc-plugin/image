@@ -1,9 +1,9 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class ImageRatioTest extends PHPUnit_Framework_TestCase
+class ImageRatioTest extends TestCase
 {
     function testImageRatio()
     {

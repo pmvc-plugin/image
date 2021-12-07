@@ -1,9 +1,9 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class CreatorTest extends PHPUnit_Framework_TestCase
+class CreatorTest extends TestCase
 {
     function testCreateFromFile()
     {
@@ -15,9 +15,10 @@ class CreatorTest extends PHPUnit_Framework_TestCase
 
     function testCreateFromSize()
     {
+        $pObj = \PMVC\plug('image');
         $size = new ImageSize(500, 500);
-        $new = \PMVC\plug('image')->create($size);
+        $new = $pObj->create($size);
         $this->assertTrue($new instanceof ImageCanvas);
-        $this->assertTrue(is_resource($new->toGd()));
+        $this->assertTrue($pObj->isGd($new->toGd()));
     }
 }

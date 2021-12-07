@@ -1,24 +1,27 @@
 {
-    "name": "pmvc-plugin/image",
-    "description": "Hello World Plugin, show you how the pmvc work",
-    "type": "library",
-    "keywords": ["image", "pmvc", "plug-in"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Hill",
-            "email": "hill@kimo.com"
-        }
-    ],
-    "require": {
-        "pmvc/pmvc": "*",
-        "pmvc-plugin/tmp": "*",
-        "pmvc-plugin/color": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "PMVC\\PlugIn\\image\\": "./src"
-        }
-    },
-    "minimum-stability": "dev"
+  "name": "pmvc-plugin/image",
+  "description": "Hello World Plugin, show you how the pmvc work",
+  "type": "library",
+  "keywords": ["image", "pmvc", "plug-in"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hill",
+      "email": "hill@kimo.com"
+    }
+  ],
+  "require": {
+    "pmvc/pmvc": "*",
+    "pmvc-plugin/tmp": "*",
+    "pmvc-plugin/color": "*"
+  },
+  "require-dev": {
+    "pmvc-plugin/unit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "PMVC\\PlugIn\\image\\": "./src"
+    }
+  },
+  "minimum-stability": "dev"
 }
