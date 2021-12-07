@@ -20,6 +20,11 @@ class ImageSize
         }
     }
 
+    function toPoint()
+    {
+        return new Coord2D($this->w, $this->h);  
+    }
+
     function toString()
     {
         return $this->w . 'x' . $this->h;

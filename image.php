@@ -33,10 +33,13 @@ class image extends \PMVC\PlugIn
         return round($angle);
     }
 
-    public function process(ImageSize $size, $params, $callback, $point = null)
+    public function process(ImageSize $size, array $params, callable $callback, $point = null)
     {
         if (!($point instanceof Coord2D)) {
             $point = new Coord2D(0, 0);
+        }
+        if ($point instanceof ImageSize) {
+            $point = $point->toPoint();
         }
         array_unshift($params, '');
         for (
