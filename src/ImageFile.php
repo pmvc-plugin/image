@@ -7,6 +7,8 @@ class ImageFile extends ImageCanvas
     const jpg='jpg';
     const png='png';
     private $_path;
+    protected $_gd;
+    use TraitImageCanvas;
 
     public function __construct($file)
     {
