@@ -27,7 +27,7 @@ class ImageCanvas
         return $this->_size;
     }
 
-    function toGd()
+    public function toGd()
     {
        if (!$this->_gd) {
             $this->_gd = imagecreatetruecolor(
