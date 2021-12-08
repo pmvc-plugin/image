@@ -1,24 +1,29 @@
 <?php
+
 namespace PMVC\PlugIn\image;
 
-class Coord2D
+class Coord2D extends ImageSizeOrPoint
 {
     public $x;
     public $y;
-    public function __construct($x,$y)
+    public function __construct($x = 0, $y = 0)
     {
-        $this->x = $x;
-        $this->y = $y;
+        parent::__construct($x, $y);
+        $this->x = $this->p1;
+        $this->y = $this->p2;
     }
 
-    public function toString()
+    protected function toString()
     {
-        return $this->x.','.$this->y;
+        return $this->x . ',' . $this->y;
     }
 
-    public function __tostring()
+    public function toArray()
     {
-        return $this->toString();
+        return [
+            'x' => $this->x,
+            'y' => $this->y,
+        ];
     }
 
     public function getx()

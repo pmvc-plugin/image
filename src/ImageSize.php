@@ -1,36 +1,24 @@
 <?php
 namespace PMVC\PlugIn\image;
 
-class ImageSize
+class ImageSize extends ImageSizeOrPoint
 {
     public $w;
     public $h;
 
     function __construct($w = 0, $h = 0)
     {
-        if (is_array($w)) {
-            $this->w = $w[0] ?? 0;
-            $this->h = $w[1] ?? 0;
-        } else if ($w instanceof ImageSize) {
-            $this->w = $w->w;
-            $this->h = $w->h;
-        } else {
-            $this->w = $w;
-            $this->h = $h;
-        }
+        parent::__construct($w, $h);
+        $this->w = $this->p1;
+        $this->h = $this->p2;
     }
 
-    function toPoint()
-    {
-        return new Coord2D($this->w, $this->h);  
-    }
-
-    function toString()
+    protected function toString()
     {
         return $this->w . 'x' . $this->h;
     }
 
-    function toArray()
+    public function toArray()
     {
         return [
             'w' => $this->w,
